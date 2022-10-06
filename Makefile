@@ -1,5 +1,5 @@
-.PHONY: all
-all: test cover
+.PHONY: test-all
+test-all: test cover
 
 # Run all unit tests
 .PHONY: test
@@ -10,6 +10,9 @@ test:
 .PHONY: cover
 cover:
 	go test -short -cover -covermode=atomic ./...
+	curl -Os https://uploader.codecov.io/latest/linux/codecov
+	chmod +x codecov
+	./codecov
 
 # Apply https://github.com/golangci/golangci-lint to changes since forked from master branch
 .PHONY: lint

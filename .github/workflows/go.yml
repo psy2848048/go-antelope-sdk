@@ -23,14 +23,6 @@ jobs:
       with:
         args: --timeout=5m --enable=unparam --enable=misspell --enable=prealloc
 
-    - name: Inject configs
-      shell: bash
-      env:
-        COLLECTOR_CONFIG:  ${{ secrets.COLLECTOR_CONFIG }}
-      run: make decode ENCODED_TEXT=${COLLECTOR_CONFIG} OUT=./collector/config.yaml
-
     - name: Test
-      run: make test
+      run: make test-all
 
-    - name: Build all
-      run: make build-all
