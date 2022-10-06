@@ -1,5 +1,8 @@
 .PHONY: test-all
-test-all: test cover
+test-all: test cover upload-coverage
+
+.PHONY: get-coverage
+get-coverage: cover upload-coverage
 
 # Run all unit tests
 .PHONY: test
@@ -9,10 +12,7 @@ test:
 # Same as test but with coverage turned on
 .PHONY: cover
 cover:
-	go test -short -cover -covermode=atomic ./...
-	curl -Os https://uploader.codecov.io/latest/linux/codecov
-	chmod +x codecov
-	./codecov
+	go test -short -cover -covermode=atomic -coverprofile coverage.txt ./...
 
 # Apply https://github.com/golangci/golangci-lint to changes since forked from master branch
 .PHONY: lint
