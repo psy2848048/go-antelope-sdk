@@ -1,0 +1,36 @@
+name: Go
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@v3
+      with:
+        args: --timeout=5m --enable=unparam --enable=misspell --enable=prealloc
+
+    - name: Inject configs
+      shell: bash
+      env:
+        COLLECTOR_CONFIG:  ${{ secrets.COLLECTOR_CONFIG }}
+      run: make decode ENCODED_TEXT=${COLLECTOR_CONFIG} OUT=./collector/config.yaml
+
+    - name: Test
+      run: make test
+
+    - name: Build all
+      run: make build-all
