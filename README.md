@@ -2,7 +2,7 @@
 
 Antelope SDK written in Golang
 
-![workflow](https://github.com/psy2848048/go-antelope-sdk/actions/workflows/go.yml/badge.svg)
+![workflow](https://github.com/psy2848048/go-antelope-sdk/actions/workflows/go.yml/badge.svg)  [![codecov](https://codecov.io/gh/psy2848048/go-antelope-sdk/branch/main/graph/badge.svg?token=M4N60M0HX8)](https://codecov.io/gh/psy2848048/go-antelope-sdk)
 
 ## Getting Started
 
