@@ -30,37 +30,35 @@ const (
 
 var logger *log.Logger
 
-func init() {
-	logger = log.New(os.Stderr, "xxx: ", log.Ldate|log.Ltime|log.Lshortfile)
-}
-
 type Method string
 
-func RESTCallWithJson(endpoint string, method Method, param []byte) ([]byte, error) {
+func RESTCallWithJson(nodeDomains []string, endpoint string, method Method, param []byte) ([]byte, error) {
 	client := &http.Client{
 		Timeout: time.Duration(time.Second * REST_TIMEOUT),
 	}
 
-	// TODO: will be random based
-	domain := "https://api.eoseoul.io"
-	url := strings.Join([]string{domain, endpoint}, "/")
+	for {
+		domain := PickRandomNodeFromNodeSets(nodeDomains)
+		url := strings.Join([]string{domain, endpoint}, "/")
 
-	req, err := http.NewRequest(string(method), url, bytes.NewReader(param))
-	if err != nil {
-		return []byte{}, err
+		req, err := http.NewRequest(string(method), url, bytes.NewReader(param))
+		if err != nil {
+			return []byte{}, err
+		}
+
+		req.Header.Set(HeaderContentType, HeaderContentTypeJson)
+
+		res, err := restCall(client, req)
+		if os.IsTimeout(err) {
+			IncreaseFailure(domain)
+			continue
+		} else if err != nil {
+			return []byte{}, err
+		}
+
+		IncreaseSuccess(domain)
+		return res, nil
 	}
-
-	req.Header.Set(HeaderContentType, HeaderContentTypeJson)
-
-	res, err := restCall(client, req)
-	if os.IsTimeout(err) {
-		// TODO: will be replaced into internal BP operation counter
-		return []byte{}, err
-	} else if err != nil {
-		return []byte{}, err
-	}
-
-	return res, nil
 }
 
 func restCall(client *http.Client, req *http.Request) ([]byte, error) {

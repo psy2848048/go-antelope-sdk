@@ -1,8 +1,8 @@
 // This module contains common methods consumed from all modules.
 //
-// |- rest_api.go -> REST API caller. Send request with the given parameter and the endpoint w/random pick among nodes
+// |- rest.go -> REST API caller. Send request with the given parameter and the endpoint
 // |
-// |- node_lists.go -> whitelist of trusted BP's public endpoint
+// |- node_select.go ->  random pick among nodes w/node response stats
 // |
 // |- more to be added...
 package utils
