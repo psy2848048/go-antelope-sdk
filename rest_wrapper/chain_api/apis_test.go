@@ -18,6 +18,15 @@ func TestRESTGetProducers(t *testing.T) {
 	assert.Equal(t, len(ret.Rows), 64)
 }
 
+func TestRESTGetInfo(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+
+	ret, err := RESTGetInfo(testDomains)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
 func TestMain(m *testing.M) {
 	setUp()
 	m.Run()

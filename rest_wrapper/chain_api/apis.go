@@ -9,6 +9,28 @@ import (
 	"github.com/psy2848048/go-antelope-sdk/utils"
 )
 
+// implements `get_info` of Chain API
+// Parameters:
+//   - nodeDomains []string:
+func RESTGetInfo(nodeDomains []string) (*ResponseGetInfo, error) {
+	endpoint := "v1/chain/get_info"
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.GET, nil)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetInfo, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetInfo{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetInfo, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
+}
+
 // implements `get_producers` of Chain API
 // Parameters:
 //   - nodeDomains []string:
