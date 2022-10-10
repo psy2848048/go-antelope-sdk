@@ -1,6 +1,8 @@
 package mockServer
 
 import (
+	"net/http"
+
 	"github.com/jarcoal/httpmock"
 	"github.com/psy2848048/go-antelope-sdk/utils"
 )
@@ -10,7 +12,7 @@ func CreateAndActivateRestMockServer() {
 
 	httpmock.RegisterResponder(
 		utils.POST, "http://localhost/v1/chain/get_producers",
-		httpmock.NewStringResponder(200, chainAPIGetProducersResp),
+		httpmock.NewStringResponder(http.StatusOK, chainAPIGetProducersResp),
 	)
 }
 
