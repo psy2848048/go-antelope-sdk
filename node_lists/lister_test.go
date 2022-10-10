@@ -8,12 +8,16 @@ import (
 )
 
 func TestGetTopRankedBPNodeList(t *testing.T) {
-	nodeList, err := GetTopRankedBPNodeList(10)
+	nodeList, err := GetTopRankedBPNodeList(100)
 	assert.NoError(t, err)
 	assert.NotNil(t, nodeList)
 
-	fmt.Println("List of API nodes from the right URL and the right-formed bp.json:")
-	for _, addr := range nodeList {
+	filteredList, err := FilterByAPINodeCallable(nodeList)
+	assert.NoError(t, err)
+	assert.NotNil(t, filteredList)
+
+	fmt.Println("These are reachable node list!:")
+	for _, addr := range filteredList {
 		fmt.Println(addr)
 	}
 }

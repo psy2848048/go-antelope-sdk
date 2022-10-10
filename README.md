@@ -22,6 +22,12 @@ To be added
 make test
 ```
 
+## Get reachable API nodes
+
+```bash
+cd node_lists && go test -run TestGetTopRankedBPNodeList
+```
+
 ## Contributing
 
 ### If you can provide a fix or a feature
