@@ -12,11 +12,22 @@ func TestRESTGetProducers(t *testing.T) {
 	testDomains := []string{"http://localhost"}
 	limit := 64
 
-	mock.CreateAndActivateRestMockServer()
-	defer mock.DeactivateMockServer()
-
 	ret, err := RESTGetProducers(testDomains, uint(limit), "")
 
 	assert.NoError(t, err)
 	assert.Equal(t, len(ret.Rows), 64)
+}
+
+func TestMain(m *testing.M) {
+	setUp()
+	m.Run()
+	tearDown()
+}
+
+func setUp() {
+	mock.CreateAndActivateRestMockServer()
+}
+
+func tearDown() {
+	mock.DeactivateMockServer()
 }

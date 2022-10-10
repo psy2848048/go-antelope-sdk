@@ -25,7 +25,7 @@ const (
 	PUT    = "PUT"
 	DELETE = "DELETE"
 
-	REST_TIMEOUT = 3 // in sec
+	REST_TIMEOUT = 2 // in sec
 )
 
 var logger *log.Logger
@@ -37,7 +37,7 @@ func RESTCallWithJson(nodeDomains []string, endpoint string, method Method, para
 		Timeout: time.Duration(time.Second * REST_TIMEOUT),
 	}
 
-	for {
+	for i := 0; i < 5; i++ {
 		domain := PickRandomNodeFromNodeSets(nodeDomains)
 		url := strings.Join([]string{domain, endpoint}, "/")
 
@@ -59,6 +59,8 @@ func RESTCallWithJson(nodeDomains []string, endpoint string, method Method, para
 		IncreaseSuccess(domain)
 		return res, nil
 	}
+
+	return nil, errors.New("exceeded trial")
 }
 
 func restCall(client *http.Client, req *http.Request) ([]byte, error) {
