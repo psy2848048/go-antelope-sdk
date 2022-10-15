@@ -47,6 +47,24 @@ type ResponseGetBlock struct {
 	Transactions []Tx `json:"transactions"`
 }
 
+type RequestGetBlockInfo struct {
+	BlockNum string `json:"block_num"`
+}
+
+type ResponseGetBlockInfo struct {
+	Timestamp         types.Time `json:"timestamp"`
+	Producer          string     `json:"producer"`
+	Confirmed         uint64     `json:"confirmed"`
+	Previous          string     `json:"previous"`
+	TransactionMroot  string     `json:"transaction_mroot"`
+	ActionMroot       string     `json:"action_mroot"`
+	ScheduleVersion   uint64     `json:"schedule_version"`
+	ProducerSignature string     `json:"producer_signature"`
+	Id                string     `json:"id"`
+	BlockNum          uint64     `json:"block_num"`
+	RefBlockPrefix    uint64     `json:"ref_block_prefix"`
+}
+
 type ResponseGetInfo struct {
 	ServerVersion             string     `json:"server_version"`
 	ChainId                   string     `json:"chain_id"`

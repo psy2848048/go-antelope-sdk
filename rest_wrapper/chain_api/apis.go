@@ -37,6 +37,10 @@ func RESTGetAccount(nodeDomains []string, req *RequestGetAccount) (*ResponseGetA
 	return ret, nil
 }
 
+// implements `get_block` of Chain API
+// Parameters:
+//   - nodeDomains []string:
+//   - req: RequestGetBlock{block_num_or_id: string}
 func RESTGetBlock(nodeDomains []string, req *RequestGetBlock) (*ResponseGetBlock, error) {
 	endpoint := "v1/chain/get_block"
 
@@ -52,6 +56,34 @@ func RESTGetBlock(nodeDomains []string, req *RequestGetBlock) (*ResponseGetBlock
 	}
 
 	ret := &ResponseGetBlock{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetInfo, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
+}
+
+// implements `get_block_info` of Chain API
+// Parameters:
+//   - nodeDomains []string:
+//   - req: RequestGetBlockInfo{block_num: int}
+func RESTGetBlockInfo(nodeDomains []string, req *RequestGetBlockInfo) (*ResponseGetBlockInfo, error) {
+	endpoint := "v1/chain/get_block"
+
+	byteReq, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetInfo, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetBlockInfo{}
 	err = json.Unmarshal(byteResp, ret)
 	if err != nil {
 		err = errors.Wrap(err, "RESTGetInfo, unmarshal")

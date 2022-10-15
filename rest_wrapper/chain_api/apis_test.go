@@ -52,6 +52,18 @@ func TestRESTGetBlock(t *testing.T) {
 	assert.NotNil(t, ret)
 }
 
+func TestRESTGetBlockInfo(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+	req := &RequestGetBlockInfo{
+		BlockNum: "273283700",
+	}
+
+	ret, err := RESTGetBlockInfo(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
 func TestMain(m *testing.M) {
 	setUp()
 	code := m.Run()
