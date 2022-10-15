@@ -9,6 +9,30 @@ import (
 	"github.com/psy2848048/go-antelope-sdk/utils"
 )
 
+func RESTGetAccount(nodeDomains []string, req *RequestGetAccount) (*ResponseGetAccount, error) {
+	endpoint := "v1/chain/get_account"
+
+	byteReq, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetInfo, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetAccount{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetInfo, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
+}
+
 // implements `get_info` of Chain API
 // Parameters:
 //   - nodeDomains []string:

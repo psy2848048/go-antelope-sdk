@@ -1,6 +1,7 @@
 package chainApi
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -27,10 +28,24 @@ func TestRESTGetInfo(t *testing.T) {
 	assert.NotNil(t, ret)
 }
 
+func TestRESTGetAccount(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+	req := &RequestGetAccount{
+		AccountName: "teamgreymass",
+	}
+
+	ret, err := RESTGetAccount(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
 func TestMain(m *testing.M) {
 	setUp()
-	m.Run()
+	code := m.Run()
 	tearDown()
+
+	os.Exit(code)
 }
 
 func setUp() {

@@ -93,6 +93,11 @@ func (c *Coin) UnmarshalJSON(bz []byte) error {
 			strAmt = strAmt[breakPoint+1:]
 		}
 
+		// to prevent all number is zero and strAmt goes nil value
+		if strAmt == "" {
+			strAmt = "0"
+		}
+
 		newInt, err := NewIntFromString(strAmt)
 		if err != nil {
 			return err
