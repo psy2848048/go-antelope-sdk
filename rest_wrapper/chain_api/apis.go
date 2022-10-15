@@ -115,6 +115,14 @@ func RESTGetInfo(nodeDomains []string) (*ResponseGetInfo, error) {
 	return ret, nil
 }
 
+func RESTPushTransaction() {
+	panic("not implemented")
+}
+
+func RESTPushTransactions() {
+	panic("not implemented")
+}
+
 // implements `get_producers` of Chain API
 // Parameters:
 //   - nodeDomains []string:
