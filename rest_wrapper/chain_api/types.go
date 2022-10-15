@@ -26,6 +26,27 @@ type ResponseGetAccount struct {
 	VoterInfo              *VoterInfo              `json:"voter_info,omitempty"`
 }
 
+type RequestGetBlock struct {
+	BlockNumOrId string `json:"block_num_or_id"`
+}
+
+type ResponseGetBlock struct {
+	Timestamp         types.Time    `json:"timestamp"`
+	Producer          string        `json:"producer"`
+	Confirmed         uint64        `json:"confirmed"`
+	Previous          string        `json:"previous"`
+	TransactionMroot  string        `json:"transaction_mroot"`
+	ActionMroot       string        `json:"action_mroot"`
+	ScheduleVersion   uint64        `json:"schedule_version"`
+	NewProducers      *NewProducers `json:"new_producers,omitempty"`
+	ProducerSignature string        `json:"producer_signature"`
+	Id                string        `json:"id"`
+	BlockNum          uint64        `json:"block_num"`
+	RefBlockPrefix    uint64        `json:"ref_block_prefix"`
+
+	Transactions []Tx `json:"transactions"`
+}
+
 type ResponseGetInfo struct {
 	ServerVersion             string     `json:"server_version"`
 	ChainId                   string     `json:"chain_id"`
@@ -116,11 +137,8 @@ type AuthKey struct {
 
 type Account struct {
 	// TODO: To be modified
-	Weight     uint64 `json:"weight"`
-	Permission struct {
-		Actor      string `json:"actor"`
-		Permission string `json:"permission"`
-	} `json:"permission"`
+	Weight     uint64             `json:"weight"`
+	Permission *UnitAuthorization `json:"permission,omitempty"`
 }
 
 type LinkedAction struct {
@@ -139,6 +157,57 @@ type VoterInfo struct {
 	Flags1            int           `json:"flags1"`
 	Reserved2         int           `json:"reserved2"`
 	Reserved3         types.Coin    `json:"reserved3"`
+}
+
+type NewProducers struct {
+	Version   string            `json:"version"`
+	Producers []UnitNewProducer `json:"producers"`
+}
+
+type UnitNewProducer struct {
+	ProducerName    string `json:"producer_name"`
+	BlockSigningKey string `json:"block_signing_key"`
+}
+
+type Tx struct {
+	Status        string `json:"status"`
+	CpuUsageUs    uint64 `json:"cpu_usage_us"`
+	NetUsageWords uint64 `json:"net_usage_words"`
+	Trx           *Trx   `json:"trx"`
+}
+
+type Trx struct {
+	Id                    string           `json:"id"`
+	Signatures            []string         `json:"signatures"`
+	Compression           string           `json:"compression"`
+	PackedContextFreeData string           `json:"packed_context_free_data"`
+	ContextFreeData       []interface{}    `json:"context_free_data,omitempty"` // TODO: <- check
+	PackedTrx             string           `json:"packed_trx"`
+	TransactionInfo       *TransactionInfo `json:"transaction"`
+}
+
+type TransactionInfo struct {
+	Expiration         types.Time    `json:"expiration"`
+	RefBlockNum        uint64        `json:"ref_block_num"`
+	RefBlockPrefix     uint64        `json:"ref_block_prefix"`
+	MaxNetUsageWords   uint64        `json:"max_net_usage_words"`
+	MaxCpuUsageMs      uint64        `json:"max_cpu_usage_ms"`
+	DelaySec           uint64        `json:"delay_sec"`
+	ContextFreeActions []interface{} `json:"context_free_actions,omitempty"`
+	Actions            []UnitAction  `json:"actions"`
+}
+
+type UnitAction struct {
+	Account       string              `json:"account"`
+	Name          string              `json:"name"`
+	Authorization []UnitAuthorization `json:"authorization"`
+	Data          interface{}         `json:"data"`
+	HexData       string              `json:"hex_data"`
+}
+
+type UnitAuthorization struct {
+	Actor      string `json:"actor"`
+	Permission string `json:"permission"`
 }
 
 type UnitProducerInfo struct {

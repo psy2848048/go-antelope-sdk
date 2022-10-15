@@ -18,6 +18,11 @@ func CreateAndActivateRestMockServer() {
 	)
 
 	httpmock.RegisterResponder(
+		utils.POST, "http://localhost/v1/chain/get_block",
+		httpmock.NewStringResponder(http.StatusOK, openFile("chain_get_block.json")),
+	)
+
+	httpmock.RegisterResponder(
 		utils.GET, "http://localhost/v1/chain/get_info",
 		httpmock.NewStringResponder(http.StatusOK, openFile("chain_get_info.json")),
 	)

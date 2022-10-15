@@ -40,6 +40,18 @@ func TestRESTGetAccount(t *testing.T) {
 	assert.NotNil(t, ret)
 }
 
+func TestRESTGetBlock(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+	req := &RequestGetBlock{
+		BlockNumOrId: "273283700",
+	}
+
+	ret, err := RESTGetBlock(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
 func TestMain(m *testing.M) {
 	setUp()
 	code := m.Run()
