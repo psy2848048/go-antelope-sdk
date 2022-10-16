@@ -92,6 +92,15 @@ type ResponseGetInfo struct {
 	LastIrreversibleBlockTime types.Time `json:"last_irreversible_block_time"`
 }
 
+type RequestGetAbi struct {
+	AccountName string `json:"account_name"`
+}
+
+type ResponseGetAbi struct {
+	AccountName string `json:"account_name"`
+	ABI         *ABI   `json:"abi,omitempty"`
+}
+
 type RequestGetProducers struct {
 	Limit      *string `json:"limit,omitempty"`
 	LowerBound *string `json:"lower_bound,omitempty"`
@@ -326,6 +335,44 @@ type PendingSchedule struct {
 
 type ProtocolFeatures struct {
 	ProtocolFeatures []string `json:"protocol_features"`
+}
+
+type ABI struct {
+	Version          string                 `json:"version"`
+	Types            []interface{}          `json:"types"`
+	Structs          []ActionArgsDefinition `json:"structs"`
+	Actions          []UnitActionDefinition `json:"actions"`
+	Tables           []UnitTable            `json:"tables"`
+	RicardianClauses []string               `json:"ricardian_clauses"`
+	ErrorMessages    []string               `json:"error_messages"`
+	AbiExtensions    []interface{}          `json:"abi_extensions"`
+	Variants         []string               `json:"variants"`
+	ActionResults    []interface{}          `json:"action_results"`
+}
+
+type ActionArgsDefinition struct {
+	Name   string `json:"name"`
+	Base   string `json:"base"`
+	Fields []Args `json:"fields"`
+}
+
+type Args struct {
+	Name string `json:"name"`
+	Type string `json:"type"`
+}
+
+type UnitActionDefinition struct {
+	Name              string `json:"name"`
+	Type              string `json:"type"`
+	RicardianContract string `json:"ricardian_contract"`
+}
+
+type UnitTable struct {
+	Name      string        `json:"name"`
+	IndexType string        `json:"i64"`
+	KeyNames  []interface{} `json:"key_names"`
+	KeyTypes  []interface{} `json:"key_types"`
+	Type      string        `json:"type"`
 }
 
 type UnitProducerInfo struct {

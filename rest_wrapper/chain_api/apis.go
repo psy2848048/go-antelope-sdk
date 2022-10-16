@@ -23,14 +23,14 @@ func RESTGetAccount(nodeDomains []string, req *RequestGetAccount) (*ResponseGetA
 
 	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetInfo, rest call")
+		err = errors.Wrap(err, "RESTGetAccount, rest call")
 		return nil, err
 	}
 
 	ret := &ResponseGetAccount{}
 	err = json.Unmarshal(byteResp, ret)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetInfo, unmarshal")
+		err = errors.Wrap(err, "RESTGetAccount, unmarshal")
 		return nil, err
 	}
 
@@ -51,14 +51,14 @@ func RESTGetBlock(nodeDomains []string, req *RequestGetBlock) (*ResponseGetBlock
 
 	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetInfo, rest call")
+		err = errors.Wrap(err, "RESTGetBlock, rest call")
 		return nil, err
 	}
 
 	ret := &ResponseGetBlock{}
 	err = json.Unmarshal(byteResp, ret)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetInfo, unmarshal")
+		err = errors.Wrap(err, "RESTGetBlock, unmarshal")
 		return nil, err
 	}
 
@@ -79,14 +79,14 @@ func RESTGetBlockInfo(nodeDomains []string, req *RequestGetBlockInfo) (*Response
 
 	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetInfo, rest call")
+		err = errors.Wrap(err, "RESTGetBlockInfo, rest call")
 		return nil, err
 	}
 
 	ret := &ResponseGetBlockInfo{}
 	err = json.Unmarshal(byteResp, ret)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetInfo, unmarshal")
+		err = errors.Wrap(err, "RESTGetBlockInfo, unmarshal")
 		return nil, err
 	}
 
@@ -137,14 +137,42 @@ func RESTGetBlockHeaderState(nodeDomains []string, req *RequestGetBlockHeaderSta
 
 	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetInfo, rest call")
+		err = errors.Wrap(err, "RESTGetBlockHeaderState, rest call")
 		return nil, err
 	}
 
 	ret := &ResponseGetBlockHeaderState{}
 	err = json.Unmarshal(byteResp, ret)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetInfo, unmarshal")
+		err = errors.Wrap(err, "RESTGetBlockHeaderState, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
+}
+
+// implements `get_abi` of Chain API
+// Parameters:
+//   - nodeDomains []string:
+//   - req: RequestGetAbi{account_name: string}
+func RESTGetAbi(nodeDomains []string, req *RequestGetAbi) (*ResponseGetAbi, error) {
+	endpoint := "v1/chain/get_abi"
+
+	byteReq, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetAbi, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetAbi{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetAbi, unmarshal")
 		return nil, err
 	}
 

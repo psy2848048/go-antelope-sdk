@@ -76,6 +76,18 @@ func TestRESTGetBlockHeaderState(t *testing.T) {
 	assert.NotNil(t, ret)
 }
 
+func TestRESTGetABi(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+	req := &RequestGetAbi{
+		AccountName: "tippedtipped",
+	}
+
+	ret, err := RESTGetAbi(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
 func TestMain(m *testing.M) {
 	setUp()
 	code := m.Run()
