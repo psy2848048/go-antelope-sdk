@@ -1,6 +1,10 @@
 package chainApi
 
-import "github.com/psy2848048/go-antelope-sdk/types"
+import (
+	"encoding/json"
+
+	"github.com/psy2848048/go-antelope-sdk/types"
+)
 
 type RequestGetAccount struct {
 	AccountName string `json:"account_name"`
@@ -61,8 +65,8 @@ type ResponseGetBlockInfo struct {
 	ScheduleVersion   uint64     `json:"schedule_version"`
 	ProducerSignature string     `json:"producer_signature"`
 	Id                string     `json:"id"`
-	BlockNum          uint64     `json:"block_num"`
-	RefBlockPrefix    uint64     `json:"ref_block_prefix"`
+	BlockNum          uint64     `json:"block_num,omitempty"`
+	RefBlockPrefix    uint64     `json:"ref_block_prefix,omitempty"`
 }
 
 type ResponseGetInfo struct {
@@ -98,6 +102,27 @@ type ResponseGetProducers struct {
 	Rows                    []UnitProducerInfo `json:"rows"`
 	TotalProducerVoteWeight string             `json:"total_producer_vote_weight"`
 	More                    string             `json:"more"`
+}
+
+type RequestGetBlockHeaderState struct {
+	BlockNumOrId string `json:"block_num_or_id"`
+}
+
+type ResponseGetBlockHeaderState struct {
+	Id                                     string                      `json:"id"`
+	Header                                 *ResponseGetBlockInfo       `json:"header"`
+	BlockNum                               uint64                      `json:"block_num"`
+	DposProposedIrreversibleBlockNum       uint64                      `json:"dpos_proposed_irreversible_blocknum"`
+	DposIrreversibleBlockNum               uint64                      `json:"dpos_irreversible_blocknum"`
+	ActiveSchedule                         *ActiveSchedule             `json:"active_schedule"`
+	BlockrootMerkle                        interface{}                 `json:"blockroot_merkle"`
+	ProducerToLastProduced                 []UnitProducerInHeaderState `json:"producer_to_last_produced"`
+	ProducerToLastImpliedIrreversibleBlock []UnitProducerInHeaderState `json:"producer_to_last_implied_irb"`
+	ValidBlockSigningAuthority             *UnitAuthority              `json:"valid_block_signing_authority,omitempty"`
+	ConfirmCount                           []uint64                    `json:"confirm_count"`
+	PendingSchedule                        *PendingSchedule            `json:"pending_schedule,omitempty"`
+	ActivatedProtocolFeatures              *ProtocolFeatures           `json:"activated_protocol_features,omitempty"`
+	AdditionalSignatures                   []interface{}               `json:"additional_signatures"`
 }
 
 // Subtypes
@@ -226,6 +251,81 @@ type UnitAction struct {
 type UnitAuthorization struct {
 	Actor      string `json:"actor"`
 	Permission string `json:"permission"`
+}
+
+type ActiveSchedule struct {
+	Version   uint64                       `json:"version"`
+	Producers []ActiveScheduleUnitProducer `json:"producers"`
+}
+
+type ActiveScheduleUnitProducer struct {
+	ProducerName string         `json:"producer_name"`
+	Authority    *UnitAuthority `json:"authority,omitempty"`
+}
+
+type UnitAuthority struct {
+	Threshold uint64    `json:"threshold"`
+	Keys      []AuthKey `json:"keys"`
+}
+
+type DuplicatedUnitAuthority UnitAuthority
+
+func (u *UnitAuthority) UnmarshalJSON(b []byte) error {
+	interimRet := []interface{}{}
+
+	err := json.Unmarshal(b, &interimRet)
+	if err != nil {
+		return err
+	}
+
+	bytePartial, err := json.Marshal(interimRet[1])
+	if err != nil {
+		return err
+	}
+
+	ret := &DuplicatedUnitAuthority{}
+	err = json.Unmarshal(bytePartial, ret)
+	if err != nil {
+		return err
+	}
+
+	*u = UnitAuthority(*ret)
+
+	return nil
+}
+
+type UnitProducerInHeaderState struct {
+	ProducerName string `json:"producer_name"`
+	BlockNum     uint64 `json:"block_num"`
+}
+
+func (u *UnitProducerInHeaderState) UnmarshalJSON(b []byte) error {
+	interimRet := [2]interface{}{}
+
+	err := json.Unmarshal(b, &interimRet)
+	if err != nil {
+		return err
+	}
+
+	u.ProducerName = interimRet[0].(string)
+
+	blockNum := interimRet[1].(float64)
+	u.BlockNum = uint64(blockNum)
+
+	return nil
+}
+
+type PendingSchedule struct {
+	ScheduleLibNum uint64 `json:"schedule_lib_num"`
+	ScheduleHash   string `json:"schedule_hash"`
+	Schedule       struct {
+		Version   uint64                       `json:"version"`
+		Producers []ActiveScheduleUnitProducer `json:"producers"`
+	} `json:"schedule,omitempty"`
+}
+
+type ProtocolFeatures struct {
+	ProtocolFeatures []string `json:"protocol_features"`
 }
 
 type UnitProducerInfo struct {

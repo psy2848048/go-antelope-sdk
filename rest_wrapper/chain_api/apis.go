@@ -123,6 +123,34 @@ func RESTPushTransactions() {
 	panic("not implemented")
 }
 
+// implements `get_block_header_state` of Chain API
+// Parameters:
+//   - nodeDomains []string:
+//   - req: RequestGetBlockHeaderState{block_num_or_id: string}
+func RESTGetBlockHeaderState(nodeDomains []string, req *RequestGetBlockHeaderState) (*ResponseGetBlockHeaderState, error) {
+	endpoint := "v1/chain/get_block_header_state"
+
+	byteReq, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetInfo, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetBlockHeaderState{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetInfo, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
+}
+
 // implements `get_producers` of Chain API
 // Parameters:
 //   - nodeDomains []string:

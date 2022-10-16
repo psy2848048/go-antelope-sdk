@@ -64,6 +64,18 @@ func TestRESTGetBlockInfo(t *testing.T) {
 	assert.NotNil(t, ret)
 }
 
+func TestRESTGetBlockHeaderState(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+	req := &RequestGetBlockHeaderState{
+		BlockNumOrId: "273457972",
+	}
+
+	ret, err := RESTGetBlockHeaderState(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
 func TestMain(m *testing.M) {
 	setUp()
 	code := m.Run()
