@@ -197,14 +197,38 @@ func RESTGetCurrencyBalance(nodeDomains []string, req *RequestGetCurrencyBalance
 
 	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetAbi, rest call")
+		err = errors.Wrap(err, "RESTGetCurrencyBalance, rest call")
 		return nil, err
 	}
 
 	ret := &ResponseGetCurrencyBalance{}
 	err = json.Unmarshal(byteResp, ret)
 	if err != nil {
-		err = errors.Wrap(err, "RESTGetAbi, unmarshal")
+		err = errors.Wrap(err, "RESTGetCurrencyBalance, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
+}
+
+func RESTGetCurrencyStats(nodeDomains []string, req *RequestGetCurrencyStats) (*ResponseGetCurrencyStats, error) {
+	endpoint := "v1/chain/get_currency_stats"
+
+	byteReq, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetCurrencyStats, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetCurrencyStats{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetCurrencyStats, unmarshal")
 		return nil, err
 	}
 

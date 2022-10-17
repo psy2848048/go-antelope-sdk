@@ -102,6 +102,19 @@ func TestRESTGetCurrencyBalance(t *testing.T) {
 	assert.NotNil(t, ret)
 }
 
+func TestRESTGetCurrencyStats(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+	req := &RequestGetCurrencyStats{
+		Code:   "eosiochaince",
+		Symbol: "CET",
+	}
+
+	ret, err := RESTGetCurrencyStats(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
 func TestMain(m *testing.M) {
 	setUp()
 	code := m.Run()

@@ -168,6 +168,13 @@ func (r *ResponseGetCurrencyBalance) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+type RequestGetCurrencyStats struct {
+	Code   string `json:"code"`
+	Symbol string `json:"symbol"`
+}
+
+type ResponseGetCurrencyStats map[string]UnitCurrencyStats
+
 // Subtypes
 
 type RefundRequest struct {
@@ -407,6 +414,12 @@ type UnitTable struct {
 	KeyNames  []interface{} `json:"key_names"`
 	KeyTypes  []interface{} `json:"key_types"`
 	Type      string        `json:"type"`
+}
+
+type UnitCurrencyStats struct {
+	Supply    types.Coin `json:"supply"`
+	MaxSupply types.Coin `json:"max_supply"`
+	Issuer    string     `json:"issuer"`
 }
 
 type UnitProducerInfo struct {
