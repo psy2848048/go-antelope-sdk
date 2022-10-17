@@ -179,6 +179,38 @@ func RESTGetAbi(nodeDomains []string, req *RequestGetAbi) (*ResponseGetAbi, erro
 	return ret, nil
 }
 
+// implements `get_currency_balance` of Chain API
+// Parameters:
+//   - nodeDomains []string:
+//   - req: RequestGetCurrencyBalance{
+//     code: string,          // account name of the token contract
+//     account_name: string,  // account name of the token holder
+//     symbol: string         // upper cased token symbol
+//     }
+func RESTGetCurrencyBalance(nodeDomains []string, req *RequestGetCurrencyBalance) (*ResponseGetCurrencyBalance, error) {
+	endpoint := "v1/chain/get_currency_balance"
+
+	byteReq, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetAbi, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetCurrencyBalance{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetAbi, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
+}
+
 // implements `get_producers` of Chain API
 // Parameters:
 //   - nodeDomains []string:

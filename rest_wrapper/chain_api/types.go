@@ -134,6 +134,40 @@ type ResponseGetBlockHeaderState struct {
 	AdditionalSignatures                   []interface{}               `json:"additional_signatures"`
 }
 
+type RequestGetCurrencyBalance struct {
+	Code    string `json:"code"`
+	Account string `json:"account"`
+	Symbol  string `json:"symbol"`
+}
+
+type ResponseGetCurrencyBalance struct {
+	Amount types.Coin `json:"amount"`
+}
+
+func (r *ResponseGetCurrencyBalance) UnmarshalJSON(b []byte) error {
+	interimRet := []interface{}{}
+
+	err := json.Unmarshal(b, &interimRet)
+	if err != nil {
+		return err
+	}
+
+	bytePartial, err := json.Marshal(interimRet[0])
+	if err != nil {
+		return err
+	}
+
+	ret := &types.Coin{}
+	err = json.Unmarshal(bytePartial, ret)
+	if err != nil {
+		return err
+	}
+
+	r.Amount = *ret
+
+	return nil
+}
+
 // Subtypes
 
 type RefundRequest struct {

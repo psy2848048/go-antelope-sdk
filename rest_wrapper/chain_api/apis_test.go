@@ -76,13 +76,27 @@ func TestRESTGetBlockHeaderState(t *testing.T) {
 	assert.NotNil(t, ret)
 }
 
-func TestRESTGetABi(t *testing.T) {
+func TestRESTGetABI(t *testing.T) {
 	testDomains := []string{"http://localhost"}
 	req := &RequestGetAbi{
 		AccountName: "tippedtipped",
 	}
 
 	ret, err := RESTGetAbi(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
+func TestRESTGetCurrencyBalance(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+	req := &RequestGetCurrencyBalance{
+		Code:    "eosiochaince",
+		Account: "haydinrvgage",
+		Symbol:  "CET",
+	}
+
+	ret, err := RESTGetCurrencyBalance(testDomains, req)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, ret)
