@@ -175,6 +175,15 @@ type RequestGetCurrencyStats struct {
 
 type ResponseGetCurrencyStats map[string]UnitCurrencyStats
 
+type RequestGetRequiredKeys struct {
+	Transaction   types.TransactionInfo `json:"transaction"`
+	AvailableKeys []string              `json:"available_keys"`
+}
+
+type ResponseGetRequiredKeys struct {
+	RequiredKeys []string `json:"required_keys"`
+}
+
 // Subtypes
 
 type RefundRequest struct {

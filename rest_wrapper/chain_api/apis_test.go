@@ -1,11 +1,14 @@
 package chainApi
 
 import (
+	"encoding/json"
+	"fmt"
 	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/psy2848048/go-antelope-sdk/types"
 	mock "github.com/psy2848048/go-antelope-sdk/utils/mock_server"
 )
 
@@ -113,6 +116,47 @@ func TestRESTGetCurrencyStats(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.NotNil(t, ret)
+}
+
+func TestRESTGetRequiredKeys(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+	currTime, _ := types.NewTimeFromString("2022-10-17T13:59:48")
+
+	req := &RequestGetRequiredKeys{
+		Transaction: types.TransactionInfo{
+			Expiration:       currTime,
+			RefBlockNum:      64629,
+			RefBlockPrefix:   1239991166,
+			MaxNetUsageWords: 0,
+			MaxCpuUsageMs:    0,
+			DelaySec:         0,
+
+			Actions: []types.UnitAction{
+				{
+					Account: "everipediaiq",
+					Name:    "transfer",
+					Authorization: []types.UnitAuthorization{
+						{
+							Actor:      "haydinrvgage",
+							Permission: "owner",
+						},
+					},
+					Data: "a09861fb4e97bc69002ed6d99daa3155102700000000000003495100000000002431346534373536622d633630332d346537382d383966322d303663333364646430376534",
+				},
+			},
+		},
+		AvailableKeys: []string{
+			"EOS5LYTegVed738P24stzRNG9BFdt5hxWHUo2VrnPE6LXDDcMa4dD",
+		},
+	}
+
+	ret, err := RESTGetRequiredKeys(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+
+	byteReq, _ := json.MarshalIndent(req, "", "    ")
+	fmt.Println(string(byteReq))
 }
 
 func TestMain(m *testing.M) {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
+	"github.com/psy2848048/go-antelope-sdk/types"
 	"github.com/psy2848048/go-antelope-sdk/utils"
 )
 
@@ -229,6 +230,39 @@ func RESTGetCurrencyStats(nodeDomains []string, req *RequestGetCurrencyStats) (*
 	err = json.Unmarshal(byteResp, ret)
 	if err != nil {
 		err = errors.Wrap(err, "RESTGetCurrencyStats, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
+}
+
+func RESTGetRequiredKeys(nodeDomains []string, req *RequestGetRequiredKeys) (*ResponseGetRequiredKeys, error) {
+	endpoint := "v1/chain/get_required_keys"
+
+	// null check + force input empty array
+	if req.Transaction.ContextFreeActions == nil {
+		req.Transaction.ContextFreeActions = make([]types.UnitAction, 0)
+	}
+
+	if req.Transaction.TransactionExtensions == nil {
+		req.Transaction.TransactionExtensions = make([]uint64, 0)
+	}
+
+	byteReq, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetRequiredKeys, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetRequiredKeys{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetRequiredKeys, unmarshal")
 		return nil, err
 	}
 
