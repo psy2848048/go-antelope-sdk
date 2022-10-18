@@ -184,6 +184,16 @@ type ResponseGetRequiredKeys struct {
 	RequiredKeys []string `json:"required_keys"`
 }
 
+type RequestGetRawCodeAndABI struct {
+	AccountName string `json:"account_name"`
+}
+
+type ResponseGetRawCodeAndABI struct {
+	AccountName string `json:"account_name"`
+	WASM        string `json:"wasm"`
+	ABI         string `json:"abi"`
+}
+
 // Subtypes
 
 type RefundRequest struct {

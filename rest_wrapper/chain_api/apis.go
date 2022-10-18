@@ -311,3 +311,27 @@ func RESTGetProducers(nodeDomains []string, limit uint, lowerBound string) (*Res
 
 	return ret, nil
 }
+
+func RESTGetRawCodeAndABI(nodeDomains []string, req *RequestGetRawCodeAndABI) (*ResponseGetRawCodeAndABI, error) {
+	endpoint := "v1/chain/get_raw_code_and_abi"
+
+	byteReq, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetRawCodeAndABI, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetRawCodeAndABI{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetRawCodeAndABI, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
+}

@@ -159,6 +159,18 @@ func TestRESTGetRequiredKeys(t *testing.T) {
 	fmt.Println(string(byteReq))
 }
 
+func TestRESTGetRawCodeAndABI(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+	req := &RequestGetRawCodeAndABI{
+		AccountName: "tippedtipped",
+	}
+
+	ret, err := RESTGetRawCodeAndABI(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
 func TestMain(m *testing.M) {
 	setUp()
 	code := m.Run()
