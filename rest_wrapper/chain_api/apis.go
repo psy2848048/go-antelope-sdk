@@ -335,3 +335,7 @@ func RESTGetRawCodeAndABI(nodeDomains []string, req *RequestGetRawCodeAndABI) (*
 
 	return ret, nil
 }
+
+func RESTGetScheduledTransaction() {
+	panic("not in use")
+}
