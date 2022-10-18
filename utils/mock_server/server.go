@@ -66,6 +66,11 @@ func CreateAndActivateRestMockServer() {
 		utils.POST, "http://localhost/v1/chain/get_raw_code_and_abi",
 		httpmock.NewStringResponder(http.StatusOK, openFile("chain_get_raw_code_and_abi.json")),
 	)
+
+	httpmock.RegisterResponder(
+		utils.POST, "http://localhost/v1/chain/get_table_by_scope",
+		httpmock.NewStringResponder(http.StatusOK, openFile("chain_get_table_by_scope.json")),
+	)
 }
 
 func openFile(filename string) string {

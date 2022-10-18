@@ -171,6 +171,24 @@ func TestRESTGetRawCodeAndABI(t *testing.T) {
 	assert.NotNil(t, ret)
 }
 
+func TestRESTGetTableByScope(t *testing.T) {
+	testDomains := []string{"http://localhost"}
+
+	var limit uint64 = 10
+	req := &RequestGetTableByScope{
+		Code:      "tippedtipped",
+		Table:     "accounts",
+		Limit:     &limit,
+		Reverse:   false,
+		ShowPayer: false,
+	}
+
+	ret, err := RESTGetTableByScope(testDomains, req)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, ret)
+}
+
 func TestMain(m *testing.M) {
 	setUp()
 	code := m.Run()

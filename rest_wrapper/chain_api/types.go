@@ -194,6 +194,21 @@ type ResponseGetRawCodeAndABI struct {
 	ABI         string `json:"abi"`
 }
 
+type RequestGetTableByScope struct {
+	Code       string  `json:"code"`
+	Table      string  `json:"table"`
+	LowerBound *string `json:"lower_bound,omitempty"`
+	UpperBound *string `json:"upper_bound,omitempty"`
+	Limit      *uint64 `json:"limit"`
+	Reverse    bool    `json:"reverse"`
+	ShowPayer  bool    `json:"show_payer"`
+}
+
+type ResponseGetTableByScope struct {
+	Rows []AggregatedTableRow `json:"rows"`
+	More string               `json:"more"`
+}
+
 // Subtypes
 
 type RefundRequest struct {
@@ -450,4 +465,12 @@ type UnitProducerInfo struct {
 	UnpaidBlocks  uint64 `json:"unpaid_blocks"`
 	LastClaimTime string `json:"last_claim_time"`
 	Location      uint   `json:"location"`
+}
+
+type AggregatedTableRow struct {
+	Code  string `json:"code"`
+	Scope string `json:"scope"`
+	Table string `json:"table"`
+	Payer string `json:"payer"`
+	Count uint64 `json:"count"`
 }

@@ -312,6 +312,10 @@ func RESTGetProducers(nodeDomains []string, limit uint, lowerBound string) (*Res
 	return ret, nil
 }
 
+// implements `get_raw_code_and_abi` of Chain API
+// Parameters:
+//   - nodeDomains []string:
+//   - RequestGetRawCodeAndABI{account_name: string}
 func RESTGetRawCodeAndABI(nodeDomains []string, req *RequestGetRawCodeAndABI) (*ResponseGetRawCodeAndABI, error) {
 	endpoint := "v1/chain/get_raw_code_and_abi"
 
@@ -338,4 +342,32 @@ func RESTGetRawCodeAndABI(nodeDomains []string, req *RequestGetRawCodeAndABI) (*
 
 func RESTGetScheduledTransaction() {
 	panic("not in use")
+}
+
+// implements `get_abi` of Chain API
+// Parameters:
+//   - nodeDomains []string:
+//   - req: RequestGetAbi{account_name: string}
+func RESTGetTableByScope(nodeDomains []string, req *RequestGetTableByScope) (*ResponseGetTableByScope, error) {
+	endpoint := "v1/chain/get_table_by_scope"
+
+	byteReq, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	byteResp, err := utils.RESTCallWithJson(nodeDomains, endpoint, utils.POST, byteReq)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetTAbleByScope, rest call")
+		return nil, err
+	}
+
+	ret := &ResponseGetTableByScope{}
+	err = json.Unmarshal(byteResp, ret)
+	if err != nil {
+		err = errors.Wrap(err, "RESTGetTAbleByScope, unmarshal")
+		return nil, err
+	}
+
+	return ret, nil
 }
